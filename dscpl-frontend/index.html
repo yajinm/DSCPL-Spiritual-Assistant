@@ -26,7 +26,6 @@
             0% { opacity: 0; }
             100% { opacity: 1; }
         }
-        /* NEW: Animation for the breathing guide */
         @keyframes breathing-animation {
             0% { transform: scale(0.8); } /* Start small */
             33% { transform: scale(1.2); } /* Inhale for 4s */
@@ -158,7 +157,6 @@
 
             const handleModeChange = async (newMode) => {
                 setMode(newMode);
-                // FIXED: Corrected the typo 'devitation' to 'devotion'
                 if (newMode === 'devotion') {
                     setView('devotion-options');
                 } else if (newMode === 'prayer') {
@@ -169,7 +167,7 @@
                     setIsGenerating(true);
                     setView('meditation-structured');
                     try {
-                        const res = await fetch("http://localhost:5000/chat", {
+                        const res = await fetch("https://dscpl-backend.onrender.com/chat", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ requestType: 'meditation_scripture' }),
@@ -200,7 +198,7 @@
                 setIsGenerating(true);
                 let requestType = option === 'Bible Reading' ? 'bible_verse' : 'short_prayer';
                 try {
-                    const res = await fetch("http://localhost:5000/chat", {
+                    const res = await fetch("https://dscpl-backend.onrender.com/chat", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ requestType: requestType }),
@@ -236,7 +234,7 @@
                 } else if (optionKey === 'Scripture for Strength') {
                     setIsGenerating(true);
                     try {
-                        const res = await fetch("http://localhost:5000/chat", {
+                        const res = await fetch("https://dscpl-backend.onrender.com/chat", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ requestType: 'scripture_for_strength' }),
@@ -280,7 +278,7 @@
                 setInput("");
                 setLoading(true);
                 try {
-                    const res = await fetch("http://localhost:5000/chat", {
+                    const res = await fetch("https://dscpl-backend.onrender.com/chat", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ message: messageWithContext, mode: mode }),
@@ -482,25 +480,6 @@
                             </div>
                         )}
 
-                        {/* This view is no longer used by Meditation */}
-                        {view === 'topic-selection' && mode && (
-                            <div className="flex-1 p-6 sm:p-10 flex flex-col items-center justify-center">
-                                <h2 className="text-3xl font-bold text-coffee-dark mb-4 text-center">{modes[mode].welcome}</h2>
-                                <div className="max-w-2xl w-full grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
-                                    {Object.keys(modes[mode].topics).map((topicName, index) => (
-                                        <button 
-                                            key={topicName}
-                                            onClick={() => handleTopicSelect(topicName)}
-                                            className="p-4 bg-cream/80 rounded-lg shadow-sm text-lg text-coffee-dark font-semibold text-center hover:bg-amber-light hover:shadow-md transition-all duration-200 animate-slide-in-fwd"
-                                            style={{ animationDelay: `${index * 80}ms`, opacity: 0 }}
-                                        >
-                                            {topicName}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                        
                         {view === 'weekly-plan-prompt' && (
                              <div className="flex-1 p-6 sm:p-10 flex flex-col items-center justify-center text-center animate-fade-in">
                                 <CalendarIcon className="h-20 w-20 text-coffee-light/50 mb-6" />
