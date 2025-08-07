@@ -8,13 +8,22 @@ import { fileURLToPath } from 'url';
 dotenv.config();
 const app = express();
 
-// --- NEW: Serve the frontend file --- //
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-app.use(express.static(path.join(__dirname, 'public')));
-// --- End of New Section --- //
 
-app.use(cors()); // Keep CORS for safety, though it may not be needed now
+// --- CRITICAL FIX: Serve the frontend --- //
+
+// 1. Tell Express to serve all files in the 'public' folder
+app.use(express.static(path.join(__dirname, 'public')));
+
+// 2. Explicitly handle the main page request
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// --- End of Fix --- //
+
+app.use(cors());
 app.use(express.json());
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
@@ -65,6 +74,5 @@ app.post("/chat", async (req, res) => {
   }
 });
 
-// This line is no longer needed on Render, but fine to keep for local testing
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
