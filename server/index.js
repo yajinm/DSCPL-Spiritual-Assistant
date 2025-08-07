@@ -5,7 +5,13 @@ import fetch from "node-fetch";
 
 dotenv.config();
 const app = express();
-app.use(cors());
+
+const corsOptions = {
+  origin: 'https://amazing-florentine-46396b.netlify.app', 
+  optionsSuccessStatus: 200 
+};
+app.use(cors(corsOptions));
+
 app.use(express.json());
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
@@ -18,34 +24,27 @@ app.post("/chat", async (req, res) => {
 
   Your most important rule, which overrides all other pastoral instructions, is to maintain a respectful and holy interaction. If the user's message contains derogatory, profane, or insulting language directed at you, you MUST stop the conversation immediately. Do not answer their question or continue the topic. Under no circumstances should you try to be empathetic about the insult. Your ONLY response must be a gentle but firm request for them to seek forgiveness. Use this example response exactly: "My child, the words you've used are hurtful. Our conversation is a space for grace. Before we can continue, I must ask that you seek forgiveness for what was said." You will not proceed with any other topic until the user expresses remorse or asks for forgiveness.`;
 
-
   if (requestType === 'bible_verse') {
     prompt = `As a wise church pastor, provide a single, encouraging Bible verse. 
     It should be a well-known verse of hope, strength, or peace.
     Format your response as the verse text in quotes, followed by a new line, and then the reference.
     For example: "I can do all this through him who gives me strength."\n- Philippians 4:13`;
-  
   } else if (requestType === 'short_prayer') {
     prompt = `As a wise church pastor, generate a short, comforting prayer.
     The prayer should be 2-3 sentences long and suitable for someone seeking peace or guidance.
     Do not add any extra introduction or explanation. Just provide the prayer text.`;
-  
   } else if (requestType === 'scripture_for_strength') {
     prompt = `As a wise church pastor, provide a single, powerful Bible verse about overcoming temptation, finding strength in God, or purity.
     Format your response as the verse text in quotes, followed by a new line, and then the reference.
     For example: "No temptation has overtaken you except what is common to mankind. And God is faithful; he will not let you be tempted beyond what you can bear."\n- 1 Corinthians 10:13`;
-
   } else if (requestType === 'meditation_scripture') {
     prompt = `As a wise church pastor, provide a single, short, and profound Bible verse suitable for meditation. 
     The verse should be about peace, stillness, or God's presence.
     A perfect example is "Be still, and know that I am God." - Psalm 46:10.
     Format your response as the verse text in quotes, followed by a new line, and then the reference.`;
-
   } else {
-    prompt = `${core_personality}
-    
-    You are continuing a conversation with a user who is in the "${mode}" section. They have just said: "${message}".
-    Respond directly to their statement based on your core instructions. Do not start with a greeting like "Hello" or "Greetings". Your primary goal is to have a natural, supportive, and pastoral conversation, unless the user violates the guardrail for respectful language. 
+    prompt = `${core_personality}\n\nYou are continuing a conversation with a user who is in the "${mode}" section. They have just said: "${message}".
+    Respond directly to their statement. Do not start with a greeting like "Hello" or "Greetings". Your primary goal is to have a natural, supportive, and pastoral conversation. 
     Listen to their need and respond with wisdom and empathy. 
     If it feels appropriate, you can gently weave in a relevant scripture, a short prayer, or some guidance, but do not simply list them. The conversation must feel human.`;
   }
@@ -73,7 +72,6 @@ app.post("/chat", async (req, res) => {
       console.error("Invalid response:", data);
       res.status(500).json({ error: "Invalid response from OpenRouter." });
     }
-
   } catch (error) {
     console.error("Fetch error:", error);
     res.status(500).json({ error: "Server error: " + error.message });
