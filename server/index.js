@@ -55,7 +55,7 @@ app.post("/chat", async (req, res) => {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
-        "HTTP-Referer": "https://amazing-florentine-46396b.netlify.app",
+        //"HTTP-Referer": "https://amazing-florentine-46396b.netlify.app",//
         "X-Title": "DSCPL"
       },
       body: JSON.stringify({
