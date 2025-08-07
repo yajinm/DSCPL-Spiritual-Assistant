@@ -167,7 +167,7 @@
                     setIsGenerating(true);
                     setView('meditation-structured');
                     try {
-                        const res = await fetch("https://dscpl-backend.onrender.com/chat", {
+                        const res = await fetch("/chat", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ requestType: 'meditation_scripture' }),
@@ -198,7 +198,7 @@
                 setIsGenerating(true);
                 let requestType = option === 'Bible Reading' ? 'bible_verse' : 'short_prayer';
                 try {
-                    const res = await fetch("https://dscpl-backend.onrender.com/chat", {
+                    const res = await fetch("/chat", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ requestType: requestType }),
@@ -234,7 +234,7 @@
                 } else if (optionKey === 'Scripture for Strength') {
                     setIsGenerating(true);
                     try {
-                        const res = await fetch("https://dscpl-backend.onrender.com/chat", {
+                        const res = await fetch("/chat", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ requestType: 'scripture_for_strength' }),
@@ -278,7 +278,7 @@
                 setInput("");
                 setLoading(true);
                 try {
-                    const res = await fetch("https://dscpl-backend.onrender.com/chat", {
+                    const res = await fetch("/chat", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ message: messageWithContext, mode: mode }),

@@ -2,23 +2,22 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 const app = express();
 
-const corsOptions = {
-  origin: 'https://amazing-florentine-46396b.netlify.app', 
-  optionsSuccessStatus: 200 
-};
-app.use(cors(corsOptions));
+// --- NEW: Serve the frontend file --- //
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use(express.static(path.join(__dirname, 'public')));
+// --- End of New Section --- //
 
+app.use(cors()); // Keep CORS for safety, though it may not be needed now
 app.use(express.json());
 
-// --- CRITICAL CHANGE --- //
-// Replace the placeholder text with your actual OpenRouter API key.
-const OPENROUTER_API_KEY = "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";
-// --- END OF CHANGE --- //
-
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
 app.post("/chat", async (req, res) => {
   const { message, mode, requestType } = req.body;
@@ -66,4 +65,6 @@ app.post("/chat", async (req, res) => {
   }
 });
 
-app.listen(5000, () => console.log("Server running on http://localhost:5000"));
+// This line is no longer needed on Render, but fine to keep for local testing
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
